@@ -60,13 +60,13 @@ def check_hash(hash, difficulity):
 
 def parallel_run(problem, difficulity, users_profiles):
 
-    a, b = multiprocessing.Pipe()
+    rec_channel, send_channel = multiprocessing.Pipe()
     problem = 'Nonce to compute ' + str(problem)
     procs = []
 
     # (Init processes) Create number of processes for parallel computing
     for uname in users_profiles:
-      procs.append(multiprocessing.Process(target=proof_of_work_fast, name=uname, args = (problem, uname, difficulity, b)))
+      procs.append(multiprocessing.Process(target=proof_of_work_fast, name=uname, args = (problem, uname, difficulity, send_channel)))
 
     #(Start all process) Start processes
     for p in procs:
@@ -74,7 +74,7 @@ def parallel_run(problem, difficulity, users_profiles):
       p.start()
 
     # (blocking call) Wait till one of the children processes sends the result.
-    result = a.recv()
+    result = rec_channel.recv()
 
     # Add the score to the winner
     add_score(result[2], users_profiles)
