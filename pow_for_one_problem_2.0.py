@@ -8,8 +8,8 @@ import datetime
 """
     The object to problem is to find the secret such that the computed hash of nonce + secret contain sufficicent number of "0" at the end.
     
-    This problem use serial and parallel approaches to solve a problem of proof of work: 
-    Both serial mode and parallel mode use the same nonce.
+    This problem makes use of multiprocessing and pipe to solve pow.
+    
     
 """
 
